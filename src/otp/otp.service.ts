@@ -28,8 +28,8 @@ export class OtpService {
     await this.mailService.sendVerificationCodeToEmail(
       email,
       generatedCode,
-      appSetting.appLogo,
-      appSetting.appName,
+      appSetting?.appLogo || '',
+      appSetting?.appName || 'Mirza Mehraj Baig Real Estate',
     );
     return otp;
   }
@@ -47,8 +47,8 @@ export class OtpService {
     await this.mailService.sendVerificationCodeForForgotPasswordToEmail(
       email,
       generatedCode,
-      appSetting.appLogo,
-      appSetting.appName,
+      appSetting?.appLogo || '',
+      appSetting?.appName || 'Mirza Mehraj Baig Real Estate',
     );
     return otp;
   }
