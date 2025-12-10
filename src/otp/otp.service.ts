@@ -1,9 +1,10 @@
 import { HttpException, HttpStatus, Injectable } from '@nestjs/common';
 import { InjectModel } from '@nestjs/mongoose';
-import { Otp } from './schema/otp.schema';
 import { Model } from 'mongoose';
-import { MailService } from 'src/services/mail.service';
 import * as bcrypt from 'bcryptjs';
+
+import { Otp } from './schema/otp.schema';
+import { MailService } from 'src/services/mail.service';
 import {
   generateOTP,
   hashedOtpOrPassword,
@@ -18,42 +19,73 @@ export class OtpService {
     private readonly globalSettingService: GlobalSettingsService,
   ) {}
 
-  //create otp for verification
+  // ✅ CREATE OTP FOR SIGNUP VERIFICATION
   async createOtpForVerification(email: string) {
     const generatedCode = generateOTP();
-    const hashedOtp = await hashedOtpOrPassword(generatedCode.toString());
-    const otp = await this.otpModel.create({ email, code: hashedOtp });
-    const appSetting = await this.globalSettingService.getGlobalSetting();
-    //send the code via email
-    await this.mailService.sendVerificationCodeToEmail(
-      email,
-      generatedCode,
-      appSetting?.appLogo || '',
-      appSetting?.appName || 'Mirza Mehraj Baig Real Estate',
+    const hashedOtp = await hashedOtpOrPassword(
+      generatedCode.toString(),
     );
+
+    const otp = await this.otpModel.create({
+      email,
+      code: hashedOtp,
+    });
+
+    const appSetting =
+      await this.globalSettingService.getGlobalSetting();
+
+    // ✅ EMAIL IS OPTIONAL — NEVER FAIL SIGNUP
+    try {
+      await this.mailService.sendVerificationCodeToEmail(
+        email,
+        generatedCode,
+        appSetting?.appLogo || '',
+        appSetting?.appName || 'Mirza Mehraj Baig Real Estate',
+      );
+    } catch (error) {
+      console.error(
+        'Email error (ignored during signup):',
+        (error as any)?.message,
+      );
+    }
+
     return otp;
   }
 
-  //create otp for forgot password
+  // ✅ CREATE OTP FOR FORGOT PASSWORD
   async createOtpForForgotPassword(email: string) {
     const generatedCode = generateOTP();
-    const hashedOtp = await hashedOtpOrPassword(generatedCode.toString());
-    const appSetting = await this.globalSettingService.getGlobalSetting();
+    const hashedOtp = await hashedOtpOrPassword(
+      generatedCode.toString(),
+    );
+
     const otp = await this.otpModel.create({
       email,
       code: hashedOtp,
       isForForgotPassword: true,
     });
-    await this.mailService.sendVerificationCodeForForgotPasswordToEmail(
-      email,
-      generatedCode,
-      appSetting?.appLogo || '',
-      appSetting?.appName || 'Mirza Mehraj Baig Real Estate',
-    );
+
+    const appSetting =
+      await this.globalSettingService.getGlobalSetting();
+
+    try {
+      await this.mailService.sendVerificationCodeForForgotPasswordToEmail(
+        email,
+        generatedCode,
+        appSetting?.appLogo || '',
+        appSetting?.appName || 'Mirza Mehraj Baig Real Estate',
+      );
+    } catch (error) {
+      console.error(
+        'Email error (ignored during forgot password):',
+        (error as any)?.message,
+      );
+    }
+
     return otp;
   }
 
-  //validate otp code and update status
+  // ✅ VERIFY OTP FOR SIGNUP
   async verifyOtpCodeForVerification(email: string, code: string) {
     const isOtpExist = await this.otpModel
       .findOne({
@@ -62,25 +94,34 @@ export class OtpService {
         isForForgotPassword: false,
       })
       .sort({ createdAt: -1 });
+
     if (!isOtpExist) {
-      throw new HttpException('Invalid Gateway', HttpStatus.BAD_GATEWAY);
+      throw new HttpException(
+        'Invalid OTP',
+        HttpStatus.BAD_REQUEST,
+      );
     }
+
     const isOtpCorrect = await bcrypt.compare(
       code.toString(),
       isOtpExist.code.toString(),
     );
+
     if (!isOtpCorrect) {
-      throw new HttpException('Invalid code', HttpStatus.BAD_REQUEST);
+      throw new HttpException(
+        'Invalid code',
+        HttpStatus.BAD_REQUEST,
+      );
     }
-    await this.otpModel.findByIdAndUpdate(
-      isOtpExist._id,
-      { $set: { isUsed: true } },
-      { new: true },
-    );
+
+    await this.otpModel.findByIdAndUpdate(isOtpExist._id, {
+      $set: { isUsed: true },
+    });
+
     return true;
   }
 
-  //verify otp code for forgot password Abdi-Nexus123H
+  // ✅ VERIFY OTP FOR FORGOT PASSWORD
   async verifyOtpCodeForForgotPassword(email: string, code: string) {
     const isOtpExist = await this.otpModel
       .findOne({
@@ -89,21 +130,30 @@ export class OtpService {
         isForForgotPassword: true,
       })
       .sort({ createdAt: -1 });
+
     if (!isOtpExist) {
-      throw new HttpException('Invalid Gateway', HttpStatus.BAD_GATEWAY);
+      throw new HttpException(
+        'Invalid OTP',
+        HttpStatus.BAD_REQUEST,
+      );
     }
+
     const isOtpCorrect = await bcrypt.compare(
       code.toString(),
       isOtpExist.code.toString(),
     );
+
     if (!isOtpCorrect) {
-      throw new HttpException('Invalid code', HttpStatus.BAD_REQUEST);
+      throw new HttpException(
+        'Invalid code',
+        HttpStatus.BAD_REQUEST,
+      );
     }
-    await this.otpModel.findByIdAndUpdate(
-      isOtpExist._id,
-      { $set: { isUsed: true } },
-      { new: true },
-    );
+
+    await this.otpModel.findByIdAndUpdate(isOtpExist._id, {
+      $set: { isUsed: true },
+    });
+
     return 'verified';
   }
 }
