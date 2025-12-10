@@ -1,10 +1,10 @@
+otp.service.ts 
 import { HttpException, HttpStatus, Injectable } from '@nestjs/common';
 import { InjectModel } from '@nestjs/mongoose';
-import { Model } from 'mongoose';
-import * as bcrypt from 'bcryptjs';
-
 import { Otp } from './schema/otp.schema';
+import { Model } from 'mongoose';
 import { MailService } from 'src/services/mail.service';
+import * as bcrypt from 'bcryptjs';
 import {
   generateOTP,
   hashedOtpOrPassword,
@@ -15,62 +15,46 @@ import { GlobalSettingsService } from 'src/global-settings/global-settings.servi
 export class OtpService {
   constructor(
     @InjectModel(Otp.name) private otpModel: Model<Otp>,
-    private readonly mailService: MailService,
+    private mailService: MailService,
     private readonly globalSettingService: GlobalSettingsService,
   ) {}
 
-  // ✅ Create OTP for signup verification
+  //create otp for verification
   async createOtpForVerification(email: string) {
     const generatedCode = generateOTP();
     const hashedOtp = await hashedOtpOrPassword(generatedCode.toString());
-
-    const otp = await this.otpModel.create({
-      email,
-      code: hashedOtp,
-    });
-
-    // ✅ SAFE SETTINGS ACCESS
+    const otp = await this.otpModel.create({ email, code: hashedOtp });
     const appSetting = await this.globalSettingService.getGlobalSetting();
-    const appLogo = appSetting?.appLogo ?? '';
-    const appName = appSetting?.appName ?? 'EstateEase';
-
+    //send the code via email
     await this.mailService.sendVerificationCodeToEmail(
       email,
       generatedCode,
-      appLogo,
-      appName,
+      appSetting.appLogo,
+      appSetting.appName,
     );
-
     return otp;
   }
 
-  // ✅ Create OTP for forgot password
+  //create otp for forgot password
   async createOtpForForgotPassword(email: string) {
     const generatedCode = generateOTP();
     const hashedOtp = await hashedOtpOrPassword(generatedCode.toString());
-
+    const appSetting = await this.globalSettingService.getGlobalSetting();
     const otp = await this.otpModel.create({
       email,
       code: hashedOtp,
       isForForgotPassword: true,
     });
-
-    // ✅ SAFE SETTINGS ACCESS
-    const appSetting = await this.globalSettingService.getGlobalSetting();
-    const appLogo = appSetting?.appLogo ?? '';
-    const appName = appSetting?.appName ?? 'EstateEase';
-
     await this.mailService.sendVerificationCodeForForgotPasswordToEmail(
       email,
       generatedCode,
-      appLogo,
-      appName,
+      appSetting.appLogo,
+      appSetting.appName,
     );
-
     return otp;
   }
 
-  // ✅ Verify OTP for signup
+  //validate otp code and update status
   async verifyOtpCodeForVerification(email: string, code: string) {
     const isOtpExist = await this.otpModel
       .findOne({
@@ -79,28 +63,25 @@ export class OtpService {
         isForForgotPassword: false,
       })
       .sort({ createdAt: -1 });
-
     if (!isOtpExist) {
       throw new HttpException('Invalid Gateway', HttpStatus.BAD_GATEWAY);
     }
-
     const isOtpCorrect = await bcrypt.compare(
       code.toString(),
       isOtpExist.code.toString(),
     );
-
     if (!isOtpCorrect) {
       throw new HttpException('Invalid code', HttpStatus.BAD_REQUEST);
     }
-
-    await this.otpModel.findByIdAndUpdate(isOtpExist._id, {
-      $set: { isUsed: true },
-    });
-
+    await this.otpModel.findByIdAndUpdate(
+      isOtpExist._id,
+      { $set: { isUsed: true } },
+      { new: true },
+    );
     return true;
   }
 
-  // ✅ Verify OTP for forgot password
+  //verify otp code for forgot password Abdi-Nexus123H
   async verifyOtpCodeForForgotPassword(email: string, code: string) {
     const isOtpExist = await this.otpModel
       .findOne({
@@ -109,24 +90,21 @@ export class OtpService {
         isForForgotPassword: true,
       })
       .sort({ createdAt: -1 });
-
     if (!isOtpExist) {
       throw new HttpException('Invalid Gateway', HttpStatus.BAD_GATEWAY);
     }
-
     const isOtpCorrect = await bcrypt.compare(
       code.toString(),
       isOtpExist.code.toString(),
     );
-
     if (!isOtpCorrect) {
       throw new HttpException('Invalid code', HttpStatus.BAD_REQUEST);
     }
-
-    await this.otpModel.findByIdAndUpdate(isOtpExist._id, {
-      $set: { isUsed: true },
-    });
-
+    await this.otpModel.findByIdAndUpdate(
+      isOtpExist._id,
+      { $set: { isUsed: true } },
+      { new: true },
+    );
     return 'verified';
   }
 }
