@@ -1,0 +1,107 @@
+<!DOCTYPE html>
+<html lang="en">
+  <head>
+    <title>Email</title>
+    <meta http-equiv="Content-Type" content="text/html; charset=utf-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <style>
+      body {
+        font-family: Arial, Helvetica, sans-serif;
+        background-color: #f7f7f7;
+        margin: 0;
+        padding: 0;
+        -webkit-text-size-adjust: none;
+        text-size-adjust: none;
+      }
+
+      .container {
+        max-width: 600px;
+        margin: 0 auto;
+        padding: 20px;
+        background-color: #fff;
+      }
+
+      .header {
+        text-align: center;
+      }
+
+      .header2 {
+        text-align: center;
+        padding-bottom: 20px;
+      }
+
+      .header img {
+        max-width: 100%;
+      }
+
+      .company-name {
+        font-size: 24px;
+        font-weight: 700;
+        color: #333;
+        margin: 10px 0;
+      }
+
+      .contact-info {
+        font-size: 16px;
+        color: #666;
+        margin: 5px 0;
+      }
+
+      .contact-info a {
+        text-decoration: none;
+        color: #0073e6;
+      }
+
+      .paragraph {
+        font-size: 16px;
+        color: #333;
+        margin: 10px 0;
+      }
+
+      .button-container {
+        text-align: center;
+      }
+
+      .button {
+        display: inline-block;
+        padding: 10px 20px;
+        background-color: #333;
+        color: #fff;
+        text-decoration: none;
+        font-weight: medium;
+        border-radius: 5px;
+      }
+
+      .footer {
+        text-align: center;
+        background-color: #333;
+        color: #fff;
+        padding: 10px 0;
+      }
+    </style>
+  </head>
+  <body>
+    <div class="container">
+      <div class="header2">
+        <img src="<%= appLogo %>" alt="App Logo" style="height: 50px" />
+      </div>
+
+      <div class="header">
+        <div class="company-name"><%= companyName %></div>
+        <img src="<%= companyLogo %>" alt="Company Logo" style="height: 50px" />
+      </div>
+
+      <div class="contact-info">
+        <p>Phone: <%= companyPhone %></p>
+        <p>Address: <%= companyAddress %></p>
+        <p>
+          Email: <a href="mailto:<%= companyEmail %>"><%= companyEmail %></a>
+        </p>
+      </div>
+
+      <div class="button-container">
+        <a href="<%= dashboardLink %>" class="button">Go to Dashboard</a>
+      </div>
+    </div>
+  </body>
+</html>

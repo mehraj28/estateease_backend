@@ -1,0 +1,13 @@
+version: "3"
+services:
+  app:
+    build:
+      context: .
+      dockerfile: Dockerfile
+    image: nest-js-realestate-api
+    container_name: my-nest-container
+    restart: always
+    ports:
+      - 80:5000
+    environment:
+      MONGO_URL: "mongodb+srv://abdi:abdi9503@cluster0.dciz7m9.mongodb.net/?retryWrites=true&w=majority"

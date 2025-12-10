@@ -1,0 +1,93 @@
+<!DOCTYPE html>
+<html
+  xmlns:v="urn:schemas-microsoft-com:vml"
+  xmlns:o="urn:schemas-microsoft-com:office:office"
+  lang="en"
+>
+  <head>
+    <title>Your Email Title</title>
+    <meta http-equiv="Content-Type" content="text/html; charset=utf-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <style>
+      * {
+        box-sizing: border-box;
+      }
+
+      body {
+        margin: 0;
+        padding: 0;
+        background-color: #fff;
+      }
+
+      a[x-apple-data-detectors] {
+        color: inherit !important;
+        text-decoration: inherit !important;
+      }
+
+      #MessageViewBody a {
+        color: inherit;
+        text-decoration: none;
+      }
+
+      @media (max-width: 620px) {
+        .mobile_hide {
+          display: none !important;
+        }
+
+        .stack .column {
+          width: 100% !important;
+          display: block;
+        }
+      }
+
+      .container {
+        max-width: 600px;
+        margin: 0 auto;
+        padding: 20px;
+        text-align: center;
+      }
+
+      .image-container {
+        text-align: center;
+      }
+      .heading {
+        font-size: 20px;
+        font-weight: 700;
+        color: #000;
+        margin: 10px 0;
+        text-align: center;
+      }
+
+      .info {
+        font-size: 25px;
+        font-weight: 700;
+        color: #000;
+        margin: 10px 0;
+        text-align: center;
+      }
+    </style>
+  </head>
+  <body>
+    <div class="container">
+      <div class="image-container">
+        <img src="<%= appLogo %>" alt="App Image" style="height: 50px" />
+      </div>
+      <div class="heading">Package: <%= name %></div>
+      <div class="heading">Max Listings: <%= maxListing %></div>
+      <div class="heading">Remaining: <%= remining %></div>
+      <a
+        href="<%= dashboardLink %>"
+        style="
+          padding: 10px 20px;
+          background-color: #333;
+          color: #fff;
+          text-decoration: none;
+          font-weight: medium;
+          border-radius: 5px;
+        "
+      >
+        Go to Dashboard
+      </a>
+    </div>
+  </body>
+</html>

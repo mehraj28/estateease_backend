@@ -1,0 +1,102 @@
+<!DOCTYPE html>
+<html
+  xmlns:v="urn:schemas-microsoft-com:vml"
+  xmlns:o="urn:schemas-microsoft-com:office:office"
+  lang="en"
+>
+  <head>
+    <title>Your Email Title</title>
+    <meta http-equiv="Content-Type" content="text/html; charset=utf-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <!--[if mso
+      ]><xml
+        ><o:OfficeDocumentSettings
+          ><o:PixelsPerInch>96</o:PixelsPerInch
+          ><o:AllowPNG /></o:OfficeDocumentSettings></xml
+    ><![endif]-->
+    <style>
+      * {
+        box-sizing: border-box;
+      }
+
+      body {
+        background-color: #f7f7f7;
+        margin: 0;
+        padding: 0;
+        -webkit-text-size-adjust: none;
+        text-size-adjust: none;
+      }
+
+      .container {
+        max-width: 600px;
+        margin: 0 auto;
+        padding: 20px;
+        background-color: #fff;
+      }
+
+      .header {
+        text-align: center;
+      }
+
+      .header img {
+        max-width: 100%;
+      }
+
+      .title {
+        font-size: 25px;
+        font-weight: 700;
+        color: #333;
+        margin: 20px 0;
+        text-align: center;
+      }
+
+      .image-container {
+        text-align: center;
+      }
+
+      .image-container img {
+        max-width: 100%;
+      }
+
+      .broker-info {
+        font-size: 25px;
+        font-weight: 700;
+        color: #333;
+        margin: 20px 0;
+        text-align: center;
+      }
+
+      .button-container {
+        text-align: center;
+        margin-top: 20px;
+      }
+
+      .button {
+        display: inline-block;
+        padding: 10px 20px;
+        background-color: #333;
+        color: #fff;
+        text-decoration: none;
+        font-weight: medium;
+        border-radius: 5px;
+      }
+    </style>
+  </head>
+  <body>
+    <div class="container">
+      <div class="header">
+        <img src="<%= appLogo %>" alt="Image" style="height: 50px" />
+      </div>
+
+      <div class="title"><%= name %></div>
+
+      <div class="image-container">
+        <img src="<%= image %>" alt="Property Image" style="height: 300px" />
+      </div>
+
+      <div class="button-container">
+        <a href="<%= dashboardLink %>" class="button">Go to Dashboard</a>
+      </div>
+    </div>
+  </body>
+</html>

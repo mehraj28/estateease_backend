@@ -1,0 +1,80 @@
+<!DOCTYPE html>
+<html
+  xmlns:v="urn:schemas-microsoft-com:vml"
+  xmlns:o="urn:schemas-microsoft-com:office:office"
+  lang="en"
+>
+  <head>
+    <title>Your Email Title</title>
+    <meta http-equiv="Content-Type" content="text/html; charset=utf-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <!--[if mso
+      ]><xml
+        ><o:OfficeDocumentSettings
+          ><o:PixelsPerInch>96</o:PixelsPerInch
+          ><o:AllowPNG /></o:OfficeDocumentSettings></xml
+    ><![endif]-->
+    <style>
+      * {
+        box-sizing: border-box;
+      }
+
+      body {
+        margin: 0;
+        padding: 0;
+        background-color: #f4f4f4;
+        text-align: center;
+      }
+
+      .container {
+        max-width: 600px;
+        margin: 0 auto;
+        padding: 20px;
+        text-align: left;
+        background-color: #ffffff;
+        box-shadow: 0 4px 6px rgba(0, 0, 0, 0.1);
+      }
+
+      .heading {
+        font-size: 20px;
+        font-weight: 600;
+        color: #333;
+        margin: 10px 0;
+      }
+
+      .info {
+        font-size: 14px;
+        color: #666;
+        margin: 10px 0;
+      }
+      .image-container {
+        text-align: center;
+      }
+      .reported-by {
+        font-size: 20px;
+        font-weight: 600;
+        color: #333;
+        margin: 10px 0;
+      }
+
+      .user-name {
+        font-size: 20px;
+        font-weight: 600;
+        color: #333;
+        margin: 10px 0;
+      }
+    </style>
+  </head>
+  <body>
+    <div class="container">
+      <div class="image-container">
+        <img src="<%= appLogo %>" alt="App Image" style="height: 50px" />
+      </div>
+      <div class="heading">Report: <%= reason %></div>
+      <div class="info"><strong>Reported By:</strong></div>
+      <div class="user-name"><%= userName %></div>
+      <div class="info"><strong>Reported Property:</strong></div>
+      <div class="user-name"><%= propertyName %></div>
+    </div>
+  </body>
+</html>
