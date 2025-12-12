@@ -13,11 +13,8 @@ RUN npm install
 # Copy the entire project directory to the working directory in the container
 COPY . .
 
-# Build the NestJS application
-RUN npm run build
-
 # Expose the port your NestJS app is running on (change this to the actual port)
 EXPOSE 5000
 
 # Start the NestJS application
-CMD [ "npm", "start" ]
+CMD [ "npm", "run", "start:dev" ]
